@@ -1,19 +1,17 @@
 #include "WindowManager.h"
-
 #include <iostream>
 #include "Exceptions.h"
-#include "Window.hpp"
+#include "SDL_video.h"
 
 WindowManager* WindowManager::instance = NULL;
 
-sf::Window* WindowManager::CreateWindow(const char* windowTitle, int width, int height)
+SDL_Window* WindowManager::CreateWindow(const char* windowTitle, int windowPositionX, int windowPositionY, int width, int height, Uint32 flags)
 {
 	char* title = windowTitle ? windowTitle : "gabeNgine3";
-	sf::Window* window = new sf::Window(sf::VideoMode(width, height), title);
+	SDL_Window* window = SDL_CreateWindow(title, windowPositionX, windowPositionY, width, height, flags);
 	windowList.push_back(window);
 	return window;
 }
-
 WindowManager* WindowManager::getWindowManagerInstance()
 {
 	if (instance == NULL){
@@ -44,9 +42,14 @@ WindowManager& WindowManager::operator=(WindowManager const&)
 
 WindowManager::~WindowManager()
 {
-	for (auto window : windowList){
-		delete window;
+	for (SDL_Window* window : windowList){
 		window = NULL;
 	}
 	std::cout << "WindowManager Destructor()" << std::endl;
+}
+
+void WindowManager::FillWindowWithColor(SDL_Window* window, Uint32 color)
+{
+	SDL_Surface* windowSurface = SDL_GetWindowSurface(window);
+	SDL_FillRect(windowSurface, NULL, color);
 }

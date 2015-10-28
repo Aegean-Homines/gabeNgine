@@ -2,16 +2,17 @@
 #define WINDOW_MANAGER_H_
 
 #include <list>
+#include "SDL_stdinc.h"
 
-class sf::Window;
+struct SDL_Window;
 
 class WindowManager
 {
 public:
 
 	//Creates window with a custom window title, if title = null creates one with default title
-	sf::Window* CreateWindow(const char* windowTitle, int windowX, int windowY, int width, int height);
-	sf::Window* CreateWindow(const char* windowTitle, int width, int height);
+	SDL_Window* CreateWindow(const char* windowTitle, int windowPositionX, int windowPositionY, int width, int height, Uint32 flags);
+	void FillWindowWithColor(SDL_Window* window, Uint32 color);
 	static WindowManager* getWindowManagerInstance();
 private:
 	WindowManager();
@@ -19,7 +20,7 @@ private:
 	WindowManager& operator=(WindowManager const&);
 	~WindowManager();
 	static WindowManager* instance;
-	std::list <sf::Window*> windowList;
+	std::list <SDL_Window*> windowList;
 };
 
 #endif // WINDOW_MANAGER_H_

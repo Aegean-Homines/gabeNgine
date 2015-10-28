@@ -1,4 +1,5 @@
 #include "SpriteComponent.h"
+#include <iostream>
 #include "SDL_surface.h"
 
 SpriteComponent::SpriteComponent()

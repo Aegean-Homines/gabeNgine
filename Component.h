@@ -5,6 +5,7 @@
 
 class GameObject;
 
+
 enum COMPONENT_TYPE{
 	TRANSFORM,
 	SPRITE,

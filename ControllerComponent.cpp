@@ -1,4 +1,5 @@
 #include "ControllerComponent.h"
+#include <iostream>
 
 
 ControllerComponent::ControllerComponent()

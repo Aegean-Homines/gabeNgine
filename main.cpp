@@ -56,7 +56,17 @@
 
 #include <iostream>
 
+#include "SDL_image.h"
 #include "WindowManager.h"
+#include "SurfaceManager.h"
+#include "ImageManager.h"
+#include "InputManager.h"
+#include "FramerateManager.h"
+#include "GameObject.h"
+#include "Component.h"
+#include "TransformComponent.h"
+#include "SpriteComponent.h"
+#include "SDL_rect.h"
 #include "Exceptions.h"
 
 
@@ -68,19 +78,134 @@ using namespace std;
 
 
 int main(int argc, char* argv[]){
+	SDL_Window* window = NULL;
+	SDL_Surface* windowSurface = NULL;
+	SDL_Surface* imageSurface = NULL;
+	SDL_Surface* pngSurface = NULL;
+	SDL_Rect imageSrcRect;
+	SDL_Rect imageDestRect;
 	int imgCounter = 0;
 	bool isRunning = true;
 
 	WindowManager* windowManager = WindowManager::getWindowManagerInstance();
+	SurfaceManager* surfaceManager = SurfaceManager::getSurfaceManagerInstance();
+	ImageManager* imageManager = ImageManager::getImageManagerInstance();
+	InputManager* inputManager = InputManager::getInputManagerInstance();
+	FramerateManager* framerateManager = FramerateManager::getFramerateManagerInstance();
 
+	GameObject* gObj = new GameObject(); //managera at destructor aşamasında delete etsin.
+	TransformComponent* transform = gObj->getComponent<TransformComponent>(TRANSFORM);
+	SpriteComponent* sprite = gObj->getComponent<SpriteComponent>(SPRITE);
+
+
+	transform->setX(SCREEN_WIDTH / 3);
+	transform->setY(SCREEN_HEIGHT / 4);
 	try{
 		//Creating the window
-		sf::Window window = windowManager->CreateWindow("mah window", 1024, 768);
+		window = windowManager->CreateWindow("mah window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 768, SDL_WINDOW_RESIZABLE);
 		
-		
+		//Get surface to draw on
+		windowSurface = SDL_GetWindowSurface(window);
+		//First image
+		imageSurface = surfaceManager->getSurfaceWithImage("gaben.bmp", BMP);
+		sprite->setMySurface(imageSurface);
+		//Second image
+		pngSurface = surfaceManager->getSurfaceWithImage("erensprite.png", PNG);
+		//Adding transparency - Basically removing the color specified as RGB value
+		imageManager->addTransparency(pngSurface, SDL_TRUE, 36, 83, 141);
+		framerateManager->setFramerate(15);
 
 		while (isRunning){
+			framerateManager->frameStart();
+			windowManager->FillWindowWithColor(window, 0x808080);
 
+			inputManager->update();
+			if (inputManager->isKeyDown("W"))
+				cout << "Key down" << endl;
+			else /*if (inputManager->isKeyUp("W"))
+				cout << "Key up" << endl;
+			else */if (inputManager->isKeyPressed("W"))
+				cout << "Key pressed" << endl;
+			else if (inputManager->isKeyReleased("W"))
+				cout << "Key released" << endl;
+
+
+			//spreadsheet isn't equally divided that's why this is so crappy
+			switch (imgCounter++){
+			case 0:
+			imageSrcRect.x = 0;
+			imageSrcRect.y = 200;
+			imageSrcRect.w = 140;
+			imageSrcRect.h = 80;
+			break;
+			case 1:
+			imageSrcRect.x += imageSrcRect.w;
+			imageSrcRect.w = 120;
+			imageSrcRect.h = 80;
+			break;
+			case 2:
+			imageSrcRect.x += imageSrcRect.w;
+			imageSrcRect.w = 110;
+			imageSrcRect.h = 80;
+			break;
+			case 3:
+			imageSrcRect.x += imageSrcRect.w;
+			imageSrcRect.w = 115;
+			imageSrcRect.h = 80;
+			break;
+			case 4:
+			imageSrcRect.x += imageSrcRect.w;
+			imageSrcRect.w = 115;
+			imageSrcRect.h = 80;
+			break;
+			case 5:
+			imageSrcRect.x = 0;
+			imageSrcRect.y += imageSrcRect.h + 5;
+			imageSrcRect.w = 140;
+			imageSrcRect.h = 100;
+			break;
+			case 6:
+			imageSrcRect.x += imageSrcRect.w;
+			imageSrcRect.w = 120;
+			imageSrcRect.h = 100;
+			break;
+			case 7:
+			imageSrcRect.x += imageSrcRect.w;
+			imageSrcRect.w = 110;
+			imageSrcRect.h = 100;
+			break;
+			case 8:
+			imageSrcRect.x += imageSrcRect.w;
+			imageSrcRect.w = 110;
+			imageSrcRect.h = 100;
+			break;
+			case 9:
+			imageSrcRect.x += imageSrcRect.w;
+			imageSrcRect.w = 140;
+			imageSrcRect.h = 100;
+			imgCounter = 0;
+			}
+
+			for (int i = 0; i < 18; ++i){
+				//Setting the location of the blitting for the second pic
+				imageDestRect.x = 100 * i;
+				imageDestRect.y = 100;
+
+				if (SDL_BlitSurface(pngSurface, &imageSrcRect, windowSurface, &imageDestRect) != 0){
+					cout << "Blitting failed." << SDL_GetError() << endl;
+					return -1;
+				}
+			}
+
+			imageDestRect.x = transform->getX();
+			imageDestRect.y = transform->getY();
+			if (SDL_BlitSurface(sprite->getMySurface(), NULL, windowSurface, &imageDestRect) != 0){
+				cout << "Blitting failed." << SDL_GetError() << endl;
+				return -1;
+			}
+
+			SDL_UpdateWindowSurface(window);
+			framerateManager->frameEnd();
 		}
 	}
 	catch (WindowManagerException& e){

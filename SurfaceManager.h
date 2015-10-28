@@ -1,11 +1,10 @@
 #ifndef SURFACE_MANAGER_H_
 #define SURFACE_MANAGER_H_
 
-#include "SDL_stdinc.h"
 #include "list"
 
-struct SDL_Surface;
 struct SDL_Window;
+struct SDL_Surface;
 
 enum IMAGE_TYPE{
 	PNG,

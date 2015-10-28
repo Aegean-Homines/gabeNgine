@@ -3,8 +3,8 @@
 
 #include "Component.h"
 
-struct SDL_Surface;
 class GameObject;
+struct SDL_Surface;
 
 class SpriteComponent : public Component
 {

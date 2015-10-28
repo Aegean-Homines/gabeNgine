@@ -1,7 +1,7 @@
 #include "ImageManager.h"
-#include "SDL_surface.h"
 #include "Exceptions.h"
 #include <iostream>
+#include "SDL_surface.h"
 
 ImageManager* ImageManager::instance = NULL;
 

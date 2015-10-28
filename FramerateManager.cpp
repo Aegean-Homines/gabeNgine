@@ -1,6 +1,5 @@
 #include "FramerateManager.h"
 #include "SDL_timer.h"
-
 #include <iostream>
 
 FramerateManager* FramerateManager::instance = NULL;
@@ -43,7 +42,6 @@ FramerateManager::FramerateManager()
 	timePerFrame = 1000 / framerate;
 	std::cout << "FramerateManager Default Constructor()" << std::endl;
 }
-
 
 FramerateManager::FramerateManager(FramerateManager const&)
 {

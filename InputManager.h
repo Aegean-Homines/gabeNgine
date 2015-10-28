@@ -1,7 +1,7 @@
 #ifndef INPUT_MANAGER_H_
 #define INPUT_MANAGER_H_
 
-#include <SDL_scancode.h>
+#include "SDL_keyboard.h"
 
 class InputManager
 {
@@ -10,7 +10,6 @@ public:
 	bool isKeyDown(const char* key) const;
 	bool isKeyDown(SDL_Scancode keyCode) const;
 	bool isKeyUp(const char* key) const;
-	//TODO figure out these two without creating another array
 	bool isKeyReleased(const char* key) const;
 	bool isKeyPressed(const char* key) const;
 	void update();

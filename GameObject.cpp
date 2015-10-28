@@ -3,6 +3,7 @@
 #include "SpriteComponent.h"
 #include "ControllerComponent.h"
 #include <iostream>
+#include "SDL_stdinc.h"
 
 
 GameObject::GameObject()

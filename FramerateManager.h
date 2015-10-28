@@ -2,7 +2,6 @@
 #define FRAMERATE_MANAGER_H_
 
 #include "SDL_stdinc.h"
-
 #define MAX_FRAME_RATE 120
 
 class FramerateManager

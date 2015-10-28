@@ -2,10 +2,12 @@
 
 #include <iostream>
 #include "Exceptions.h"
+#include "SDL_surface.h"
 #include "SDL_video.h"
 #include "SDL_image.h"
 
 SurfaceManager* SurfaceManager::instance = NULL;
+
 
 SDL_Surface* SurfaceManager::getSurfaceFromWindow(SDL_Window* window)
 {
@@ -76,10 +78,6 @@ SurfaceManager& SurfaceManager::operator=(SurfaceManager const&)
 
 SurfaceManager::~SurfaceManager()
 {
-	for (auto surface : surfaceList){
-		SDL_FreeSurface(surface);
-		surface = NULL;
-	}
-	std::cout << "SurfaceManager Destructor()" << std::endl;
+
 }
 
